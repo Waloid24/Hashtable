@@ -1,0 +1,42 @@
+digraph G {
+  graph [dpi = 100];
+
+  ranksep = 1.5;
+
+  splines = ortho;
+
+  {rank = min;
+          above_node[shape = rectangle, style = "rounded, invis", fixedsize = true, height = 1, width = 2, fontsize = 30, label = "Hi!", width = 3];  }
+  {rank = same;
+  node0[shape = record, style = "rounded, filled", color = "#8c6bb1", label="size = 5|<h0>head = 101.00|<t0>tail = 73.00"];
+  edge[minlen = 3, penwidth = 3];
+  node[shape = rectangle, style = "rounded, filled",
+              fixedsize = true, height = 1, width = 2,
+              penwidth = 4, color ="#fa9fb5", fontsize = 30];
+
+  node1[fillcolor = "#ffffcc", label = "101.00"];
+  node2[fillcolor = "#ffffcc", label = "20.00"];
+  node3[fillcolor = "#ffffcc", label = "45.00"];
+  node4[fillcolor = "#ffffcc", label = "65.00"];
+  node5[fillcolor = "#ffffcc", label = "73.00"];
+  }
+  {rank = max;
+          below_node[style = invis, label = "Bye!", width = 3];
+  }
+
+  above_node -> node0 [style = invis];
+  below_node -> node0 [style = invis];
+  node0:h0 -> node1 [color = blue];
+  node0:t0 -> node5 [color = blue];
+  node1 -> node2 [color = black];
+  node2 -> node1 [color = black];
+  node2 -> node3 [color = black];
+  node3 -> node2 [color = black];
+  node3 -> node4 [color = black];
+  node4 -> node3 [color = black];
+  node4 -> node5 [color = black];
+  node5 -> node4 [color = black];
+  node1 -> node5 [color = black];
+  node5 -> node1 [color = black];
+}
+

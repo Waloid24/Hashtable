@@ -1,11 +1,12 @@
 #include "textProcessing.hpp"
-
-char ** getArrayWords (const char * fileName)
+size_t STANDART_NUM_WORDS = 500;
+textInfo_t getArrayWords (const char * fileName)
 {
     MY_ASSERT (fileName == nullptr, "There is no access to file name");
-	char ** text = (char **) calloc (1, sizeof (char **));
-    size_t numSymbols = getText (fileName, text);
-    return textParsing (*text, numSymbols);    
+	// char ** text = (char **) calloc (1, sizeof (char **));
+	char * text = nullptr;
+    size_t numSymbols = getText (fileName, &text);
+    return textParsing (text, numSymbols);  
 }
 
 static size_t getText (const char * fileName, char ** text)
@@ -25,22 +26,31 @@ static size_t getText (const char * fileName, char ** text)
     return nElem;
 }
 
-static char ** textParsing (char * text, size_t numSymbols)
+static textInfo_t textParsing (char * text, size_t numSymbols)
 {
     MY_ASSERT (text == nullptr, "Unable to access the text");
+    textInfo_t textInfo = {};
+
     char ** arrayWords = (char **) calloc (STANDART_NUM_WORDS, sizeof (char *));
     char * sep = "\n \t ,.:()[]!?;'";
     char * word = strtok (text, sep);
 
-    for (int i = 0; word != nullptr; i++)
+    int numWords = 0;
+    for (; word != nullptr; numWords++)
     {
-        if (i == STANDART_NUM_WORDS)
+        if (numWords == STANDART_NUM_WORDS)
         {
-            arrayWords = (char **) realloc (arrayWords, STANDART_NUM_WORDS*sizeof(char *));
+            arrayWords = (char **) realloc (arrayWords, 2*numWords*sizeof(char *));
             MY_ASSERT (arrayWords == nullptr, "Not enough memory for next processing");
+            STANDART_NUM_WORDS *= 2;
         }
 
-        arrayWords[i] = word;
+        arrayWords[numWords] = word;
         word = strtok (nullptr, sep);
     }
+
+    textInfo.numWords = numWords;
+    textInfo.arrayWords = arrayWords;
+
+    return textInfo;
 }

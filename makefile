@@ -1,6 +1,6 @@
 
 CXX	:= g++
-SOURCES := main.cpp textProcessing.cpp hash-function.cpp
+SOURCES := main.cpp textProcessing.cpp hash-function.cpp listPtr.cpp
 BUILD_DIR := ./build
 SRC_DIR   := ./src
 
@@ -31,14 +31,17 @@ FLAGS	:= -mavx -mavx2 -g --static-pie -std=c++14 -fmax-errors=100 \
 SRCS	:= $(shell find $(SRC_DIR) -name '*.cpp')
 OBJS	:= $(SRCS:%=$(BUILD_DIR)/%.o)
 
+filenames := *.dot *.html
+files	:= $(strip $(foreach f,$(filenames),$(wildcard $(f))))
+
 # The final build step
 $(BUILD_DIR)/hashtable: $(OBJS)
-	$(CXX) $(OBJS) -o $@ 
+	@ $(CXX) $(OBJS) -o $@
 
 #Build step for C++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
-	mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@ mkdir -p $(dir $@)
+	@ $(CXX) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: clean
 clean:
