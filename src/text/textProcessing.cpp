@@ -7,7 +7,6 @@ static textInfo_t textParsing (char * text, size_t numSymbols);
 textInfo_t getArrayWords (const char * fileName)
 {
     MY_ASSERT (fileName == nullptr, "There is no access to file name");
-	// char ** text = (char **) calloc (1, sizeof (char **));
 	char * text = nullptr;
     size_t numSymbols = getText (fileName, &text);
     return textParsing (text, numSymbols);  
@@ -39,7 +38,7 @@ static textInfo_t textParsing (char * text, size_t numSymbols)
     char * sep = "\n \t ,.:()[]!?;'";
     char * word = strtok (text, sep);
 
-    int numWords = 0;
+    size_t numWords = 0;
     for (; word != nullptr; numWords++)
     {
         if (numWords == STANDART_NUM_WORDS)

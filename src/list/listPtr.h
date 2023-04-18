@@ -8,7 +8,7 @@
 //====================================variables used=====================================
 
 typedef char * elem_t;
-static int NUMBER_OF_GRAPHIC_DUMPS = 1;
+static size_t NUMBER_OF_GRAPHIC_DUMPS = 1;
 
 //=======================================================================================
 
@@ -39,7 +39,7 @@ void                    listDestructor          (listPtr_t * list);
 void                    listDeleteElem          (listPtr_t * list, struct listElement_t * currentElem);
 
 struct listElement_t *  listValidator           (const listPtr_t * list, FILE * const log);
-void listGraphviz (const listPtr_t * list, size_t numLists, const char * nameDOTfile, FILE * ptrHTMLfile);
+void listGraphviz (const listPtr_t * list, const char * nameDOTfile, FILE * ptrHTMLfile);
 
 //===============================support function=======================================
 

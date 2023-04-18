@@ -1,14 +1,9 @@
-
-CXX	:= g++
-SOURCES := main.cpp textProcessing.cpp hashtable.cpp listPtr.cpp
-BUILD_DIR := ./build
-SRC_DIR   := ./src
-
-CXXFLAGS  := -mavx -mavx2 -g --static-pie -std=c++14 -fmax-errors=100 \
+CXX             ?= g++
+CXXFLAGS        ?= -mavx -mavx2 -g --static-pie -std=c++14 -fmax-errors=100 \
 -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations -Wc++0x-compat \
 -Wc++11-compat -Wc++14-compat -Wcast-align -Wcast-qual -Wchar-subscripts \
 -Wconditionally-supported -Wconversion -Wctor-dtor-privacy -Wempty-body \
--Wfloat-equal 	-Wformat-nonliteral -Wformat-security -Wformat-signedness \
+-Wfloat-equal   -Wformat-nonliteral -Wformat-security -Wformat-signedness \
 -Wformat=2 -Winline -Wlarger-than=8192 -Wlogical-op -Wmissing-declarations \
 -Wnon-virtual-dtor -Wopenmp-simd -Woverloaded-virtual -Wpacked -Wpointer-arith \
 -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo \
@@ -28,21 +23,11 @@ CXXFLAGS  := -mavx -mavx2 -g --static-pie -std=c++14 -fmax-errors=100 \
 -fsanitize=signed-integer-overflow -fsanitize=undefined \
 -fsanitize=unreachable -fsanitize=vla-bound -fsanitize=vptr -lm -pie
 
-SRCS	:= $(shell find $(SRC_DIR) -name '*.cpp')
-OBJS	:= $(SRCS:%=$(BUILD_DIR)/%.o)
+SRC	:= hashtable.cpp
+OBJ	:= $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
 
-filenames := *.dot *.html
-files	:= $(strip $(foreach f,$(filenames),$(wildcard $(f))))
+all: $(OBJ)
 
-# The final build step
-$(BUILD_DIR)/hashtable: $(OBJS)
-	@ $(CXX) $(OBJS) -o $@
+$(OBJDIR)/%.o: %.cpp | $(OBJDIR)
+	@ $(CXX) -c $^ -o $@ $(CXXFLAGS)
 
-#Build step for C++ source
-$(BUILD_DIR)/%.cpp.o: %.cpp
-	@ mkdir -p $(dir $@)
-	@ $(CXX) -c $< -o $@
-
-.PHONY: clean
-clean:
-	rm -r $(BUILD_DIR)

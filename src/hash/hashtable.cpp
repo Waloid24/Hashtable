@@ -54,14 +54,10 @@ struct listElement_t * htFind (htMainElem hashtable, char * word, size_t (hashFu
     size_t index = hashFuncs(word) % hashtable.capacity;
     size_t lengthList = hashtable.htElem[index].size;
     listElement_t * listElem = hashtable.htElem[index].ptrToList->next; 
-    // printf ("index = %lu, word = %s, lengthList = %zu\n", index, word, lengthList);
     for (size_t i = 0; i < lengthList; i++)
     {
         FILE * HTMLgraphDump = listCreateHTMLfileForGraphviz ("HTMLBuf.html");
-        fprintf (stderr, "i = %lu\n", i);
-        listGraphviz ((&hashtable.htElem[index]), 0, "GraphForPtrList.dot", HTMLgraphDump);
         char * data = listElem->data;
-        // printf ("data = %p, %s\n", data, data);
         if (strcmp (data, word) == 0)
         {
             return listElem;
@@ -79,15 +75,25 @@ static void htInsert (listPtr_t * elem, char * word)
 {
     size_t lengthList = elem->size;
     listElement_t * listElem = elem->ptrToList->next;
-    for (int i = 0; i < lengthList; i++, listElem = listElem->next)
+    for (size_t i = 0; i < lengthList; i++, listElem = listElem->next)
     {
         if (strcmp(listElem->data, word) == 0)
         {
             return; 
         }
     }
-    // printf ("insert word = %s\n", word);
     listPushFront(elem, word);
+}
+
+void htDestructor (htMainElem * ht)
+{
+    MY_ASSERT (ht == nullptr, "Unable to get access to the table");
+    size_t capacity = ht->capacity;
+    for (size_t i = 0; i < capacity; i++)
+    {
+        listDestructor (&(ht->htElem[i]));
+    }
+    free (ht->htElem);
 }
 
 size_t hashFunc1 (char * word)
@@ -100,14 +106,12 @@ size_t hashFunc1 (char * word)
 size_t hashFunc2 (char * word)
 {
     MY_ASSERT (word == nullptr, "There is no access to the word");
-    // printf ("\033[3;41m hashFunc2: word = %s \033[0m\n", word);
     return word[0];
 }
 
 size_t hashFunc3 (char * word)
 {
     MY_ASSERT (word == nullptr, "There is no access to the word");
-    // printf ("hashFunc3: word = %s\n", word);
     return strlen(word);
 }
 
