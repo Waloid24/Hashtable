@@ -324,55 +324,55 @@ void listGraphviz (const listPtr_t * list, size_t numLists, const char * nameDOT
     MY_ASSERT (ptrGraph == nullptr, "There is no access to dump file for graphviz");
 
     dumpline("digraph G {\n");
-    dumpline("  graph [dpi = 1000];\n\n");
+    dumpline("  graph [dpi = 100];\n\n");
     dumpline("  ranksep = 1.5;\n\n");
     dumpline("  splines = ortho;\n\n");
 
-    for (int i = 0; i < numLists; i++)
-    {
-        printf ("num list = %d\n", i);
-        dumpList (&(list[i]), ptrGraph);
-    }
-    printf ("end\n");
+    // for (int i = 0; i < numLists; i++)
+    // {
+    //     printf ("num list = %d\n", i);
+    //     dumpList (&(list[i]), ptrGraph);
+    // }
+    // printf ("end\n");
     
 
-    // dumpline("  {rank = min;\n");
-    // dumpline("          above_node[shape = rectangle, style = \"rounded, invis\", fixedsize = true, height = 1, width = 2, fontsize = 30, label = \"Hi!\", width = 3];");
-    // dumpline("  }\n");
-    // dumpline("  {rank = same;\n");
+    dumpline("  {rank = min;\n");
+    dumpline("          above_node[shape = rectangle, style = \"rounded, invis\", fixedsize = true, height = 1, width = 2, fontsize = 30, label = \"Hi!\", width = 3];");
+    dumpline("  }\n");
+    dumpline("  {rank = same;\n");
 
-    // dumpline("  node0[shape = record, style = \"rounded, filled\", color = \"#8c6bb1\", label=\"size = %zu|<h0>head = %.s|<t0>tail = %.s\"];\n",
-    //          list->size, list->ptrToList[0].prev->data, list->ptrToList[0].next->data);
+    dumpline("  node0[shape = record, style = \"rounded, filled\", color = \"#8c6bb1\", label=\"size = %zu|<h0>head = %s|<t0>tail = %s\"];\n",
+             list->size, list->ptrToList[0].prev->data, list->ptrToList[0].next->data);
 
-    // dumpline("  edge[minlen = 3, penwidth = 3];\n");
-    // dumpline("  node[shape = rectangle, style = \"rounded, filled\",\n");
-    // dumpline("              fixedsize = true, height = 1, width = 2,\n");
-    // dumpline("              penwidth = 4, color =\"#fa9fb5\", fontsize = 30];\n\n");
+    dumpline("  edge[minlen = 3, penwidth = 3];\n");
+    dumpline("  node[shape = rectangle, style = \"rounded, filled\",\n");
+    dumpline("              fixedsize = true, height = 1, width = 2,\n");
+    dumpline("              penwidth = 4, color =\"#fa9fb5\", fontsize = 30];\n\n");
 
-    // struct listElement_t * current = list->ptrToList[0].prev;
-    // for (int i = 1; i < list->size + 1; i++)
-    // {
-    //     dumpline("  node%d[fillcolor = \"#ffffcc\", label = \"%.s\"];\n", i, current->data);
-    //     current = current->next;
-    // }
+    struct listElement_t * current = list->ptrToList[0].prev;
+    for (int i = 1; i < list->size + 1; i++)
+    {
+        dumpline("  node%d[fillcolor = \"#ffffcc\", label = \"%s\"];\n", i, current->data);
+        current = current->next;
+    }
 
-    // dumpline("  }\n");
-    // dumpline("  {rank = max;\n");
-    // dumpline("          below_node[style = invis, label = \"Bye!\", width = 3];\n");
-    // dumpline("  }\n\n");
+    dumpline("  }\n");
+    dumpline("  {rank = max;\n");
+    dumpline("          below_node[style = invis, label = \"Bye!\", width = 3];\n");
+    dumpline("  }\n\n");
 
-    // dumpline("  above_node -> node0 [style = invis];\n");
-    // dumpline("  below_node -> node0 [style = invis];\n");
-    // dumpline("  node0:h0 -> node1 [color = blue];\n");
-    // dumpline("  node0:t0 -> node%zu [color = blue];\n", list->size);
+    dumpline("  above_node -> node0 [style = invis];\n");
+    dumpline("  below_node -> node0 [style = invis];\n");
+    dumpline("  node0:h0 -> node1 [color = blue];\n");
+    dumpline("  node0:t0 -> node%zu [color = blue];\n", list->size);
 
-    // for (int i = 1; i < list->size; i++)
-    // {
-    //     dumpline("  node%d -> node%d [color = black];\n", i, i+1);
-    //     dumpline("  node%d -> node%d [color = black];\n", i+1, i);
-    // }
-    // dumpline("  node1 -> node%zu [color = black];\n", list->size);
-    // dumpline("  node%zu -> node1 [color = black];\n", list->size);
+    for (int i = 1; i < list->size; i++)
+    {
+        dumpline("  node%d -> node%d [color = black];\n", i, i+1);
+        dumpline("  node%d -> node%d [color = black];\n", i+1, i);
+    }
+    dumpline("  node1 -> node%zu [color = black];\n", list->size);
+    dumpline("  node%zu -> node1 [color = black];\n", list->size);
 
 
 

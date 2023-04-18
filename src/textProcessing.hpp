@@ -13,7 +13,5 @@ struct textInfo {
 typedef struct textInfo textInfo_t;
 
 textInfo_t getArrayWords (const char * fileName);
-static size_t getText (const char * fileName, char ** text);
-static textInfo_t textParsing (char * text, size_t numSymbols);
 
 #endif

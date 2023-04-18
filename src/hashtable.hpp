@@ -20,10 +20,13 @@ size_t hashFunc2 (char * word);
 size_t hashFunc3 (char * word);
 size_t hashFunc4 (char * word);
 size_t hashFunc5 (char * word);
+size_t hashFunc6 (char * word);
+size_t hashFunc7 (char * word);
 
-const size_t STANDART_SIZE_TABLE = 8000;
-const double MULTIPIER = (sqrt(5)-1)/2;
-
+struct listElement_t * htFind (htMainElem hashtable, char * word, size_t (hashFuncs) (char * word));
 htMainElem createHashTable (textInfo_t textInfo, size_t (hashFuncts) (char * word), char * nameCsvFile);
+
+const size_t STANDART_SIZE_TABLE = 6000;
+const double MULTIPIER = (sqrt(5)-1)/2;
 
 #endif

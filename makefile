@@ -1,10 +1,10 @@
 
 CXX	:= g++
-SOURCES := main.cpp textProcessing.cpp hash-function.cpp listPtr.cpp
+SOURCES := main.cpp textProcessing.cpp hashtable.cpp listPtr.cpp
 BUILD_DIR := ./build
 SRC_DIR   := ./src
 
-FLAGS	:= -mavx -mavx2 -g --static-pie -std=c++14 -fmax-errors=100 \
+CXXFLAGS  := -mavx -mavx2 -g --static-pie -std=c++14 -fmax-errors=100 \
 -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations -Wc++0x-compat \
 -Wc++11-compat -Wc++14-compat -Wcast-align -Wcast-qual -Wchar-subscripts \
 -Wconditionally-supported -Wconversion -Wctor-dtor-privacy -Wempty-body \
@@ -41,7 +41,7 @@ $(BUILD_DIR)/hashtable: $(OBJS)
 #Build step for C++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@ mkdir -p $(dir $@)
-	@ $(CXX) $(CXXFLAGS) -c $< -o $@
+	@ $(CXX) -c $< -o $@
 
 .PHONY: clean
 clean:

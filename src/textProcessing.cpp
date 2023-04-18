@@ -1,5 +1,9 @@
 #include "textProcessing.hpp"
 size_t STANDART_NUM_WORDS = 500;
+
+static size_t getText (const char * fileName, char ** text);
+static textInfo_t textParsing (char * text, size_t numSymbols);
+
 textInfo_t getArrayWords (const char * fileName)
 {
     MY_ASSERT (fileName == nullptr, "There is no access to file name");

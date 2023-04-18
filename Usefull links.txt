@@ -1,0 +1,3 @@
+A way to read a column from a csv file:
+https://translated.turbopages.org/proxy_u/en-ru.ru.c6f28ec3-643bd374-19ae467f-74722d776562/https/www.geeksforgeeks.org/python-read-csv-columns-into-list/
+
