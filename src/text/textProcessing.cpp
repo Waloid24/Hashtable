@@ -1,7 +1,8 @@
+#define NDEBUG
 #include "textProcessing.hpp"
-size_t STANDART_NUM_WORDS = 500;
+static size_t STANDART_NUM_WORDS = 10000;
 
-static size_t getText (const char * fileName, char ** text);
+static size_t     getText     (const char * fileName, char ** text);
 static textInfo_t textParsing (char * text, size_t numSymbols);
 
 textInfo_t getArrayWords (const char * fileName)
@@ -26,6 +27,7 @@ static size_t getText (const char * fileName, char ** text)
 	(*text)[nElem] = '\0';
 
 	fread (*text, 1, nElem, fileInput);
+    fclose (fileInput);
     return nElem;
 }
 
@@ -34,13 +36,17 @@ static textInfo_t textParsing (char * text, size_t numSymbols)
     MY_ASSERT (text == nullptr, "Unable to access the text");
     textInfo_t textInfo = {};
 
+    textInfo.text = text;
+
     char ** arrayWords = (char **) calloc (STANDART_NUM_WORDS, sizeof (char *));
-    char * sep = "\n \t ,.:()[]!?;'";
+    const char * sep = "\n \t ,.:()[]!?;'";
     char * word = strtok (text, sep);
 
     size_t numWords = 0;
     for (; word != nullptr; numWords++)
     {
+        // char * word = (char *) calloc (1, strlen(word)); // aligned_alloc (32, 32)
+        // word32 = (char *) memmove(word32, word, strlen(word));
         if (numWords == STANDART_NUM_WORDS)
         {
             arrayWords = (char **) realloc (arrayWords, 2*numWords*sizeof(char *));
@@ -55,5 +61,21 @@ static textInfo_t textParsing (char * text, size_t numSymbols)
     textInfo.numWords = numWords;
     textInfo.arrayWords = arrayWords;
 
+    // free (text);
+
     return textInfo;
+}
+
+void textDestructor (textInfo_t textInfo)
+{
+    printf ("STANDART_NUM_WORDS = %lu\n", STANDART_NUM_WORDS);
+    // for (int i = 0; i < STANDART_NUM_WORDS; i++)
+    // {
+    //     if (textInfo.arrayWords[i] != nullptr)
+    //     {
+    //         free (textInfo.arrayWords[i]);
+    //     }
+    // }
+    // free (textInfo.text);
+    free (textInfo.arrayWords);
 }

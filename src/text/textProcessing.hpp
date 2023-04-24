@@ -4,14 +4,19 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <string.h>
-#include "MY_ASSERT.h"
+#include <stdalign.h>
+#include <stdlib.h>
+// #include "MY_ASSERT.h"
+#include "../../logs/logs.hpp"
 
 struct textInfo {
     size_t numWords;
+    char * text;
     char ** arrayWords;
 };
 typedef struct textInfo textInfo_t;
 
-textInfo_t getArrayWords (const char * fileName);
+textInfo_t getArrayWords    (const char * fileName);
+void       textDestructor   (textInfo_t textInfo);
 
 #endif

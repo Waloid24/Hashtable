@@ -1,13 +1,15 @@
- global hashBkdr
+ global hashBkdr_1
 
-section .data
+ section .data
+ ;str: db 'hello!', 0x0
  
 section .text
 
-hashBkdr:
+hashBkdr_1:
    push rdx
    push rbx
    push rcx
+
 
    xor rax, rax             ; hash
    mov rbx, 131             ; coefficient
@@ -30,7 +32,6 @@ hashBkdr:
    pop rcx
    pop rbx
    pop rdx
-
    ret
 
 

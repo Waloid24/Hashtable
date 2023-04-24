@@ -1,42 +1,75 @@
+#define NDEBUG
 #include "hashtable.hpp"
+#include "hashfuncs.hpp"
+
+const size_t STANDART_SIZE_TABLE = 1131;
 
 static void         htInsert        (listPtr_t * elem, char * word);
 static htMainElem   htInit          (void);
-static void         dropStat        (htMainElem hashtable, char * nameCsvFile);
-static size_t       rol             (size_t num);
-static size_t       ror             (size_t num);
+
+inline static int memcmpAsm (const void * str1, const void * str2, size_t length)
+{
+    int result = 0; 
+
+    asm
+    (
+        ".intel_syntax noprefix\n\t"
+        "cld\t\n"
+        "repe cmpsb\t\n"
+        "je 1f\t\n"
+        "dec %1\t\n"
+        "dec %2\t\n"
+        "mov %0, [%1]\t\n"
+        "sub %0, [%2]\t\n"
+        "jmp 2f\t\n"
+        "1:\t\n"
+        "mov %0, 0\t\n"
+        "2:\t\n"
+        ".att_syntax\t\n"
+        : "=a" (result)
+        : "S" (str1), "D" (str2), "c" (length)
+    );
+
+    return result;
+}
+
+static int memcmpAvx (const void * str1, const void * str2)
+{
+    __m256i ar1 = _mm256_loadu_si256 ((__m256i *) str1);
+    __m256i ar2 = _mm256_loadu_si256 ((__m256i *) str2);
+
+    __m256i cmp = _mm256_cmpeq_epi8 (ar1, ar2);
+    unsigned int mask = (unsigned int) _mm256_movemask_epi8 (cmp);
+
+    if (mask == 0xffffffff)
+    {
+        return 0;
+    }
+    return 1;
+}
 
 htMainElem createHashTable (textInfo_t textInfo, size_t (hashFuncs) (char * word), char * nameCsvFile)
 {
     htMainElem ht = htInit ();
     size_t index = 0;
+    char * word = nullptr;
     for (size_t i = 0; i < textInfo.numWords; i++)
     {
-        index = hashFuncs (textInfo.arrayWords[i]) % ht.capacity;
-        htInsert (&(ht.htElem[index]), textInfo.arrayWords[i]);
+        // printf ("in createHashTable\n");
+        word = textInfo.arrayWords[i];
+        // printf ("in createHashTable: before hashFunc, word = %s\n", word);
+        index = hashFuncs (word) % ht.capacity;
+        // printf ("in createHashTable: index = %lu\n", index);
+        htInsert (&(ht.htElem[index]), word);
     }
-    dropStat (ht, nameCsvFile);
 
     return ht;
-}
-
-static void dropStat (htMainElem hashtable, char * nameCsvFile)
-{    
-    FILE * table = fopen (nameCsvFile, "w");
-    MY_ASSERT (table == nullptr, "Unable to create the file");
-
-    fprintf (table, "size_of_lists\n");
-    for (size_t i = 0; i < hashtable.capacity; i++)
-    {
-        fprintf (table, "%lu\n", hashtable.htElem[i].size);
-    }
 }
 
 static htMainElem htInit (void)
 {
     htMainElem hashtable = {};
-    hashtable.size      = 0;
-    hashtable.capacity  = STANDART_SIZE_TABLE;
+    hashtable.capacity   = STANDART_SIZE_TABLE;
     hashtable.htElem     = (listPtr_t *) calloc (hashtable.capacity, sizeof(listPtr_t));
     MY_ASSERT (hashtable.htElem == nullptr, "Unable to create a hashtable");
     
@@ -47,29 +80,134 @@ static htMainElem htInit (void)
     return hashtable;
 }
 
-struct listElement_t * htFind (htMainElem hashtable, char * word, size_t (hashFuncs) (char * word))
+struct listElement_t * htFind_0 (htMainElem hashtable, char * word)
 {
     MY_ASSERT (word == nullptr, "There is no access to this word");
 
-    size_t index = hashFuncs(word) % hashtable.capacity;
+    size_t index = hashBkdr_0(word) % hashtable.capacity;
     size_t lengthList = hashtable.htElem[index].size;
     listElement_t * listElem = hashtable.htElem[index].ptrToList->next; 
+
+    size_t lengthWord = strlen (word);
+    char * data = nullptr;
+
     for (size_t i = 0; i < lengthList; i++)
-    {
-        FILE * HTMLgraphDump = listCreateHTMLfileForGraphviz ("HTMLBuf.html");
-        char * data = listElem->data;
-        if (strcmp (data, word) == 0)
+    {  
+        data = listElem->data;
+        size_t lengthData = strlen (data);
+        if (lengthData != lengthWord)
+        {
+            listElem = listElem->next;
+            continue;
+        }
+        // int resultCmp = 
+
+        if (memcmp (data, word, lengthData) == 0)
         {
             return listElem;
         }
-        else
-        {
-            listElem = listElem->next;
-        }
+        listElem = listElem->next;
     }
 
     return nullptr;
 }
+
+struct listElement_t * htFind_1 (htMainElem hashtable, char * word)
+{
+    MY_ASSERT (word == nullptr, "There is no access to this word");
+
+    size_t index = hashBkdr_1(word) % hashtable.capacity;
+    size_t lengthList = hashtable.htElem[index].size;
+    listElement_t * listElem = hashtable.htElem[index].ptrToList->next; 
+
+    size_t lengthWord = strlen (word);
+    char * data = nullptr;
+
+    for (size_t i = 0; i < lengthList; i++)
+    {  
+        data = listElem->data;
+        size_t lengthData = strlen (data);
+        if (lengthData != lengthWord)
+        {
+            listElem = listElem->next;
+            continue;
+        }
+        // int resultCmp = 
+
+        if (memcmp (data, word, lengthData) == 0)
+        {
+            return listElem;
+        }
+        listElem = listElem->next;
+    }
+
+    return nullptr;
+}
+
+struct listElement_t * htFind_2 (htMainElem hashtable, char * word)
+{
+    MY_ASSERT (word == nullptr, "There is no access to this word");
+
+    size_t index = hashBkdr_1(word) % hashtable.capacity;
+    size_t lengthList = hashtable.htElem[index].size;
+    listElement_t * listElem = hashtable.htElem[index].ptrToList->next; 
+
+    size_t lengthWord = strlen (word);
+    char * data = nullptr;
+
+    for (size_t i = 0; i < lengthList; i++)
+    {  
+        data = listElem->data;
+        size_t lengthData = strlen (data);
+        if (lengthData != lengthWord)
+        {
+            listElem = listElem->next;
+            continue;
+        }
+        // int resultCmp = 
+
+        if (memcmpAsm (data, word, lengthData) == 0)
+        {
+            return listElem;
+        }
+        listElem = listElem->next;
+    }
+
+    return nullptr;
+}
+
+struct listElement_t * htFind_3 (htMainElem hashtable, char * word)
+{
+    MY_ASSERT (word == nullptr, "There is no access to this word");
+
+    size_t index = hashBkdr_0(word) % hashtable.capacity;
+    size_t lengthList = hashtable.htElem[index].size;
+    listElement_t * listElem = hashtable.htElem[index].ptrToList->next; 
+
+    size_t lengthWord = strlen (word);
+    char * data = nullptr;
+
+    for (size_t i = 0; i < lengthList; i++)
+    {  
+        data = listElem->data;
+        size_t lengthData = strlen (data);
+        if (lengthData != lengthWord)
+        {
+            listElem = listElem->next;
+            continue;
+        }
+        // int resultCmp = 
+
+        if (memcmpAsm (data, word, lengthData) == 0)
+        {
+            return listElem;
+        }
+        listElem = listElem->next;
+    }
+
+    return nullptr;
+}
+
 
 static void htInsert (listPtr_t * elem, char * word)
 {
@@ -96,84 +234,3 @@ void htDestructor (htMainElem * ht)
     free (ht->htElem);
 }
 
-size_t hashFunc1 (char * word)
-{
-    MY_ASSERT (word == nullptr, "There is no access to the word");
-
-    return 1;
-}
-
-size_t hashFunc2 (char * word)
-{
-    MY_ASSERT (word == nullptr, "There is no access to the word");
-    return word[0];
-}
-
-size_t hashFunc3 (char * word)
-{
-    MY_ASSERT (word == nullptr, "There is no access to the word");
-    return strlen(word);
-}
-
-size_t hashFunc4 (char * word)
-{
-    MY_ASSERT (word == nullptr, "There is no access to the word");
-    size_t lengthWord = strlen (word);
-    size_t sum = 0;
-    for (size_t i = 0; i < lengthWord; i++)
-    {
-        sum += word[i];
-    }
-
-    return sum;
-}
-
-size_t hashFunc5 (char * word)
-{
-    MY_ASSERT (word == nullptr, "There is no access to the word");
-
-    size_t h = 0;
-    size_t length = strlen(word);
-    for (size_t i = 0; i < length; i++)
-    {
-        h = rol(h)^word[i];
-    }
-    return h;
-}
-
-size_t hashFunc6 (char * word)
-{
-    MY_ASSERT (word == nullptr, "There is no access to the word");
-
-    size_t h = 0;
-    size_t length = strlen(word);
-    for (size_t i = 0; i < length; i++)
-    {
-        h = ror(h)^word[i];
-    }
-    return h;
-}
-
-size_t hashFunc7 (char * word)
-{
-    MY_ASSERT (word == nullptr, "There is no access to the word");
-
-    unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
-    unsigned int hash = 0;
-
-    while (*word){
-        hash = hash * seed + (*word++);
-    }
-
-    return (hash & 0x7FFFFFFF);
-}
-
-static size_t rol (size_t num)
-{
-    return (num << 1) | (num >> (sizeof(num)*8 - 1));
-}
-
-static size_t ror (size_t num)
-{
-    return (num >> 1) | (num << (sizeof(num)*8 - 1));
-}

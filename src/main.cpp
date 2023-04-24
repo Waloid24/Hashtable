@@ -1,27 +1,49 @@
+#define NDEBUG
 #include "./text/textProcessing.hpp"
 #include "./hash/hashtable.hpp"
+#include "../logs/logs.hpp"
+#include "./hash/hashfuncs.hpp"
+#include <time.h>
 
+const size_t NUM_ITERS     = 1000;
 const size_t NUM_HASH_FUNC = 7;
 
 int main (int argc, char * argv[])
 {
-    MY_ASSERT (argc != 2, "You should enter 2 arguments: \n 1) the name of using programm; \n 2) the name of the file to be proccessed");
-
-    textInfo_t textInfo = getArrayWords (argv[1]);
-
-    size_t (*hashFuncs[])(char * word) =  {hashFunc1, hashFunc2, hashFunc3, hashFunc4, hashFunc5, hashFunc6, hashFunc7};
+    textInfo_t textInfo = getArrayWords ("./src/Text.txt");
     htMainElem ht = {};
 
-    char buf[60] = {};
-    for (size_t i = 0; i < NUM_HASH_FUNC; i++)
+    struct listElement_t * (*htFind[]) (htMainElem hashtable, char * word) = {htFind_0, htFind_3, htFind_1, htFind_2};
+
+    const char * phrases[] = {"hashBkdr_0 | memcmp",
+                              "hashBkdr_0 | memcmpAsm",
+                              "hashBkdr_1 | memcmp",
+                              "hashBkdr_1 | memcmpAsm"};
+
+    for (size_t numFuncs = 2; numFuncs < 3; numFuncs++)
     {
-        sprintf (buf, "./tables/table%lu.csv", i+1);
-        ht = createHashTable (textInfo, hashFuncs[i], buf);
+        ht = createHashTable (textInfo, hashBkdr_0, "none.csv");
+        // double secs = 0;
+        char * testWord = nullptr;
+        for (size_t numIters = 0; numIters < NUM_ITERS; numIters++)
+        {
+            for (size_t i = 0; i < textInfo.numWords; i++)
+            {
+                testWord = textInfo.arrayWords[i];
+                // clock_t start = clock();
+                htFind[numFuncs] (ht, testWord);
+                // clock_t end = clock();
+                // secs += (double)(end-start)/CLOCKS_PER_SEC;
+            }
+        }
+        // _$log ("==============for htFind_1 (base version)=================\n");
+        // _$log ("%s\n \t time: %.3f seconds\n", phrases[numFuncs], secs);
+
         htDestructor (&ht);
     }
 
-    free (textInfo.arrayWords);
+    textDestructor (textInfo);
+    
 
     return 0;
 }
-

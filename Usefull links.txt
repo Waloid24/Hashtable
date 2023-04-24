@@ -1,3 +1,10 @@
 A way to read a column from a csv file:
 https://translated.turbopages.org/proxy_u/en-ru.ru.c6f28ec3-643bd374-19ae467f-74722d776562/https/www.geeksforgeeks.org/python-read-csv-columns-into-list/
 
+http://dbp-consulting.com/tutorials/debugging/linuxProgramStartup.html
+
+About PLT etc
+http://dustin.schultz.io/how-is-glibc-loaded-at-runtime.html
+
+About function call from C library and about the call stack be aligned on a 16-byte boundary
+https://cs.lmu.edu/~ray/notes/nasmtutorial/

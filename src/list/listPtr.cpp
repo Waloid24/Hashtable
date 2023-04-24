@@ -1,3 +1,4 @@
+#define NDEBUG
 #include "listPtr.h"
 
 #define LONG_LINE "###################################################################\n"
