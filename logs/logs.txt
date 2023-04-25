@@ -39,3 +39,35 @@ hashBkdr_1 | memcmp | O3
 hashBkdr_1 | memcmpAsm | O3
  	 time: 9.350 seconds
 ==============================================
+
+
+==============for htFind_1 (base version)=================
+hashBkdr_1 | memcmpAvx | AVX
+ 	 time: 11.800 seconds
+==============for htFind_1 (base version)=================
+hashBkdr_1 | memcmp | AVX
+ 	 time: 9.772 seconds
+
+
+==============for htFind_1 (base version)=================
+hashBkdr_1 | memcmpAvx | AVX | O2
+ 	 time: 9.196 seconds
+==============for htFind_1 (base version)=================
+hashBkdr_1 | memcmp | AVX | O2
+ 	 time: 9.175 seconds
+
+
+==============for htFind_1 (base version)=================
+hashBkdr_1 | memcmpAvx | AVX | O3
+ 	 time: 9.247 seconds
+==============for htFind_1 (base version)=================
+hashBkdr_1 | memcmp | AVX | O3
+ 	 time: 9.173 seconds
+
+
+Самая быстрая конфигурация:
+
+hashBkdr_0 | memcmp | O3
+ 	 time: 8.895 seconds
+==============================================
+

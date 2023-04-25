@@ -21,7 +21,10 @@ struct listElement_t * htFind_0 (htMainElem hashtable, char * word);
 struct listElement_t * htFind_1 (htMainElem hashtable, char * word);
 struct listElement_t * htFind_2 (htMainElem hashtable, char * word);
 struct listElement_t * htFind_3 (htMainElem hashtable, char * word);
-htMainElem             createHashTable     (textInfo_t textInfo, size_t (hashFuncts) (char * word), char * nameCsvFile);
+struct listElement_t * htFind_4 (htMainElem hashtable, __m256i * word);
+struct listElement_t * htFind_5 (htMainElem hashtable, __m256i * word);
+// htMainElem             createHashTable     (textInfo_t textInfo, size_t (hashFuncts) (char * word), char * nameCsvFile);
+htMainElem                createHashTable     (textInfo_t textInfo, size_t (hashFuncs) (__m256i * word), char * nameCsvFile);
 void                   htDestructor        (htMainElem * ht);
 
 #endif

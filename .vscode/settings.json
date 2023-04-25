@@ -44,6 +44,7 @@
     "vector": "cpp",
     "string_view": "cpp",
     "initializer_list": "cpp",
-    "functional": "cpp"
+    "functional": "cpp",
+    "system_error": "cpp"
   }
 }

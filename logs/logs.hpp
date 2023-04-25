@@ -39,8 +39,8 @@ static const int DEBUG_SOFT = 0;
         do                                              \
         {                                               \
             FILE * file = _$logOF("logs.txt");          \
-			setbuf(file, nullptr);						\
             fprintf (file, message, ##__VA_ARGS__);		\
+			fclose (file);								\
         }                                               \
         while (0)
 #endif

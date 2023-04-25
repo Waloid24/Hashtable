@@ -5,11 +5,12 @@
 #include <math.h>
 // #include "MY_ASSERT.h"
 #include <stdlib.h>
+#include <immintrin.h>
 #include "../../logs/logs.hpp"
 
 //====================================variables used=====================================
 
-typedef char * elem_t;
+typedef __m256i * elem_t;
 static size_t NUMBER_OF_GRAPHIC_DUMPS = 1;
 
 //=======================================================================================

@@ -1,7 +1,7 @@
- global hashBkdr_1
+   global hashBkdr_1
 
- section .data
- ;str: db 'hello!', 0x0
+   section .data
+   ;str: db 'hello!', 0x0
  
 section .text
 

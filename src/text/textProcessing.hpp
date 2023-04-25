@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdalign.h>
 #include <stdlib.h>
+#include <immintrin.h>
 // #include "MY_ASSERT.h"
 #include "../../logs/logs.hpp"
 
@@ -13,6 +14,7 @@ struct textInfo {
     size_t numWords;
     char * text;
     char ** arrayWords;
+    __m256i ** ar256Words;
 };
 typedef struct textInfo textInfo_t;
 

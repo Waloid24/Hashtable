@@ -4,13 +4,16 @@ static size_t STANDART_NUM_WORDS = 10000;
 
 static size_t     getText     (const char * fileName, char ** text);
 static textInfo_t textParsing (char * text, size_t numSymbols);
+static void set256Words (textInfo_t * text);
 
 textInfo_t getArrayWords (const char * fileName)
 {
     MY_ASSERT (fileName == nullptr, "There is no access to file name");
 	char * text = nullptr;
     size_t numSymbols = getText (fileName, &text);
-    return textParsing (text, numSymbols);  
+    textInfo_t textInf = textParsing (text, numSymbols);
+    set256Words (&textInf);
+    return textInf;
 }
 
 static size_t getText (const char * fileName, char ** text)
@@ -66,16 +69,40 @@ static textInfo_t textParsing (char * text, size_t numSymbols)
     return textInfo;
 }
 
+static void set256Words (textInfo_t * text)
+{
+    MY_ASSERT (text == nullptr, "Unable to use \"text\" pointer");
+
+    size_t wordsCounter = text->numWords;
+
+    text->ar256Words = (__m256i **) calloc (wordsCounter, sizeof(__m256i *));
+    MY_ASSERT (text->ar256Words == nullptr, "Unable to allocate new memory");
+
+    for (size_t i = 0; i < wordsCounter; i++)
+    {
+        __m256i * _256word = (__m256i *) aligned_alloc (32, sizeof(__m256i));
+        MY_ASSERT (_256word == nullptr, "Unable to allocate new memory");
+        memset (_256word, 0, sizeof(__m256i));
+
+        alignas (32) char tmp_word[32] = {0};
+        strcpy (tmp_word, text->arrayWords[i]);
+
+        *_256word = _mm256_load_si256 ((__m256i*) tmp_word);
+
+        text->ar256Words[i] = _256word;
+    }
+    return;
+}
+
 void textDestructor (textInfo_t textInfo)
 {
     printf ("STANDART_NUM_WORDS = %lu\n", STANDART_NUM_WORDS);
-    // for (int i = 0; i < STANDART_NUM_WORDS; i++)
-    // {
-    //     if (textInfo.arrayWords[i] != nullptr)
-    //     {
-    //         free (textInfo.arrayWords[i]);
-    //     }
-    // }
-    // free (textInfo.text);
+    for (size_t i = 0; i < textInfo.numWords; i++)
+    {
+        free (textInfo.ar256Words[i]);
+    }
+    free (textInfo.ar256Words);
     free (textInfo.arrayWords);
+
+
 }
