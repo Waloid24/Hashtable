@@ -4,6 +4,12 @@
 
 const size_t STANDART_SIZE_TABLE = 1131;
 
+// struct hashtableMainElem
+// {
+//     size_t capacity;
+//     listPtr_t * htElem;
+// };
+
 // static void         htInsert        (listPtr_t * elem, char * word);
 static void htInsert (listPtr_t * elem, __m256i * word);
 static htMainElem   htInit          (void);

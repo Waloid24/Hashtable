@@ -24,25 +24,21 @@ int main (int argc, char * argv[])
     const char * phrases[] = {"hashBkdr_1 | memcmpAvx | AVX",
                               "hashBkdr_1 | memcmp | AVX"};
 
-    for (size_t numFuncs = 1; numFuncs < 2; numFuncs++)
+    for (size_t numFuncs = 0; numFuncs < 2; numFuncs++)
     {
         ht = createHashTable (textInfo, hashBkdr_1, "none.csv");
-        // double secs = 0;
-        __m256i * testWord = nullptr;
-        for (size_t numIters = 0; numIters < NUM_ITERS; numIters++)
+        double secs = 0;
+        __m256i * testWord =  textInfo.ar256Words[8];
+        for (size_t numIt = 0; numIt < 100000000; numIt++)
         {
-            for (size_t i = 0; i < textInfo.numWords; i++)
-            {
-                testWord = textInfo.ar256Words[i];
-                // clock_t start = clock();
-                // htFind[numFuncs] (ht, testWord);
+                clock_t start = clock();
                 htFind[numFuncs] (ht, testWord);
-                // clock_t end = clock();
-                // secs += (double)(end-start)/CLOCKS_PER_SEC;
-            }
+                clock_t end = clock();
+                secs += (double)(end-start)/CLOCKS_PER_SEC;
         }
-        // _$log ("==============for htFind_1 (base version)=================\n");
-        // _$log ("%s\n \t time: %.3f seconds\n", phrases[numFuncs], secs);
+        
+        _$log ("==============find 1 word=================\n");
+        _$log ("%s\n \t time: %.3f seconds\n", phrases[numFuncs], secs);
 
         htDestructor (&ht);
     }

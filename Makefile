@@ -2,7 +2,7 @@ export CXX	:= g++
 
 CXXFLAGS 	:= -g --static-pie -std=c++14 -fmax-errors=100 -fno-omit-frame-pointer -fPIE -lm -no-pie -fPIC
 
-export CUSTOM_FLAGS := -O2
+export CUSTOM_FLAGS := -fPIE
 
 # 				-mavx -mavx2 -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations -Wc++0x-compat \
 # 				-Wc++11-compat -Wc++14-compat -Wcast-align -Wcast-qual -Wchar-subscripts \
