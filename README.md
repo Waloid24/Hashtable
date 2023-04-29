@@ -277,7 +277,7 @@ static int memcmpAvx (const __m256i * ar1, const __m256i * ar2)
 Поправки:
 - функция хэширования переведена на ассемблер.
 
-![Версия 3](./imgs/version3_mem_hash0_O0.png)
+![Версия 3](./imgs/version3_mem_hash1_O0.png)
 
 Время работы: `4.71` секунды.
 Относительное ускорение: `1.07`.
