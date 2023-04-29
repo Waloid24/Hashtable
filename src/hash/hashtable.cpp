@@ -25,10 +25,10 @@ static void dropStat (htMainElem hashtable, char * nameCsvFile)
     FILE * table = fopen (nameCsvFile, "w");
     MY_ASSERT (table == nullptr, "Unable to create the file");
 
-    fprintf (table, "size_of_lists\n");
+    fprintf (table, "index;size_of_lists\n");
     for (size_t i = 0; i < hashtable.capacity; i++)
     {
-        fprintf (table, "%lu\n", hashtable.htElem[i].size);
+        fprintf (table, "%lu;%lu\n", i, hashtable.htElem[i].size);
     }
 }
 
