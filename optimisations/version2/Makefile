@@ -29,8 +29,8 @@ export CUSTOM_FLAGS := -mavx -mavx2 -O2
 
 export DESTDIR	:= $(CURDIR)/bin
 export OBJDIR	:= $(CURDIR)/obj
-TABLES			:= $(CURDIR)/tables
-OUT	  			:= $(DESTDIR)/main
+TABLES		:= $(CURDIR)/tables
+OUT	  	:= $(DESTDIR)/main
 
 isLog 		 = yesLogs
 
@@ -57,7 +57,7 @@ logs: | $(DESTDIR) $(OBJDIR) $(TABLES)
 main: | $(DESTDIR) $(OBJDIR) $(TABLES)
 	@ echo ------ COMPILE main ------
 	@ $(CXX) -c $(CURDIR)/src/main.cpp -o $(OBJDIR)/main.o $(CXXFLAGS) $(CUSTOM_FLAGS)
-	@ $(CXX) $(OBJDIR)/main.o $(OBJDIR)/hashtable.o $(OBJDIR)/hashfuncs.o $(OBJDIR)/listPtr.o $(OBJDIR)/bkdr.o $(OBJDIR)/textProcessing.o $(OBJDIR)/logs.o -o $(OUT) $(CXXFLAGS) $(CUSTOM_FLAGS)
+	@ $(CXX) $(OBJDIR)/main.o $(OBJDIR)/hashtable.o $(OBJDIR)/hashfuncs.o $(OBJDIR)/bkdr.o $(OBJDIR)/crc32.o $(OBJDIR)/listPtr.o $(OBJDIR)/textProcessing.o $(OBJDIR)/logs.o -o $(OUT) $(CXXFLAGS) $(CUSTOM_FLAGS)
 
 .PHONY: clean
 clean:

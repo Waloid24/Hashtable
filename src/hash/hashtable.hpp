@@ -22,6 +22,7 @@ size_t hashFunc4 (char * word);
 size_t hashFunc5 (char * word);
 size_t hashFunc6 (char * word);
 size_t hashFunc7 (char * word);
+size_t hashFunc8 (char * word);
 
 struct listElement_t * htFind   (htMainElem hashtable, char * word, size_t (hashFuncs) (char * word));
 htMainElem createHashTable      (textInfo_t textInfo, size_t (hashFuncts) (char * word), char * nameCsvFile);

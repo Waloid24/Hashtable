@@ -26,7 +26,7 @@ CXXFLAGS 	:= -mavx -mavx2 -g --static-pie -std=c++14 -fmax-errors=100 \
 
 export DESTDIR	:= $(CURDIR)/bin
 export OBJDIR	:= $(CURDIR)/obj
-TABLES			:= $(CURDIR)/tables
+TABLES		:= $(CURDIR)/tables
 
 OUT	  := $(DESTDIR)/main
 
@@ -52,7 +52,7 @@ main: | $(DESTDIR) $(OBJDIR) $(TABLES)
 
 .PHONY: clean
 clean:
-	rm -r $(DESTDIR) $(OBJDIR) $(TABLES)
+	rm -r $(DESTDIR) $(OBJDIR)
 
 $(DESTDIR):
 	@ mkdir $(DESTDIR)

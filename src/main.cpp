@@ -1,7 +1,7 @@
 #include "./text/textProcessing.hpp"
 #include "./hash/hashtable.hpp"
 
-const size_t NUM_HASH_FUNC = 7;
+const size_t NUM_HASH_FUNC = 8;
 
 int main (int argc, char * argv[])
 {
@@ -9,7 +9,7 @@ int main (int argc, char * argv[])
 
     textInfo_t textInfo = getArrayWords (argv[1]);
 
-    size_t (*hashFuncs[])(char * word) =  {hashFunc1, hashFunc2, hashFunc3, hashFunc4, hashFunc5, hashFunc6, hashFunc7};
+    size_t (*hashFuncs[])(char * word) =  {hashFunc1, hashFunc2, hashFunc3, hashFunc4, hashFunc5, hashFunc6, hashFunc7, hashFunc8};
     htMainElem ht = {};
 
     char buf[60] = {};

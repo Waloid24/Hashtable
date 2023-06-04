@@ -3,14 +3,13 @@
 
 #include <stdio.h>
 #include <math.h>
-// #include "MY_ASSERT.h"
 #include <stdlib.h>
-#include <immintrin.h>
+#include <string.h>
 #include "../../logs/logs.hpp"
 
 //====================================variables used=====================================
 
-typedef __m256i * elem_t;
+typedef char * elem_t;
 static size_t NUMBER_OF_GRAPHIC_DUMPS = 1;
 
 //=======================================================================================

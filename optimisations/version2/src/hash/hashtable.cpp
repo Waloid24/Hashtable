@@ -4,20 +4,8 @@
 
 const size_t STANDART_SIZE_TABLE = 107;
 
-static void         htInsert        (listPtr_t * elem, __m256i * word);
+static void         htInsert        (listPtr_t * elem, char * word);
 static htMainElem   htInit          (void);
-
-inline static int memcmpAvx (const __m256i * ar1, const __m256i * ar2)
-{
-    __m256i cmp = _mm256_cmpeq_epi8 (*ar1, *ar2);
-    unsigned int mask = (unsigned int) _mm256_movemask_epi8 (cmp);
-
-    if (mask == 0xffffffff)
-    {
-        return 0;
-    }
-    return 1;
-}
 
 htMainElem createHashTable (textInfo_t textInfo, size_t (hashFuncs) (char * word), char * nameCsvFile)
 {
@@ -26,10 +14,11 @@ htMainElem createHashTable (textInfo_t textInfo, size_t (hashFuncs) (char * word
     char * word = nullptr;
     for (size_t i = 0; i < textInfo.numWords; i++)
     {
-        word = (char *) textInfo.ar256Words[i];
+        word = textInfo.arrayWords[i];
         index = hashFuncs (word) % ht.capacity;
-        htInsert (&(ht.htElem[index]), (__m256i *) word);
+        htInsert (&(ht.htElem[index]), word);
     }
+
     return ht;
 }
 
@@ -47,39 +36,54 @@ static htMainElem htInit (void)
     return hashtable;
 }
 
-struct listElement_t * htFind (htMainElem hashtable, __m256i * word)
+inline static int memcmpAvx (const char * ar1, const char * ar2)
+{
+    __m256i str1 = _mm256_load_si256 ((const __m256i *) ar1);
+    __m256i str2 = _mm256_load_si256 ((const __m256i *) ar2);
+    __m256i cmp  = _mm256_cmpeq_epi8 (str1, str2);
+
+    int mask = _mm256_movemask_epi8 (cmp);
+
+    if (mask == 0xffffffff)
+    {
+        return 0;
+    }
+    return 1;
+}
+
+struct listElement_t * htFind (htMainElem hashtable, char * word)
 {
     MY_ASSERT (word == nullptr, "There is no access to this word");
 
-    size_t index = hashBkdr ((char *)word) % hashtable.capacity;
+    size_t index = hashCrc32Asm (word) % hashtable.capacity;
     size_t lengthList = hashtable.htElem[index].size;
     listElement_t * listElem = hashtable.htElem[index].ptrToList->next; 
 
-    __m256i * data = nullptr;
+    char * data = nullptr;
 
     for (size_t i = 0; i < lengthList; i++)
-    {  
+    {
         data = listElem->data;
-
-        if (memcmp (data, word, 32) == 0)
+        if (memcmpAvx (data, word) == 0)
         {
             return listElem;
         }
+
         listElem = listElem->next;
     }
 
     return nullptr;
 }
 
-static void htInsert (listPtr_t * elem, __m256i * word)
+static void htInsert (listPtr_t * elem, char * word)
 {
     size_t lengthList = elem->size;
     listElement_t * listElem = elem->ptrToList->next;
     for (size_t i = 0; i < lengthList; i++, listElem = listElem->next)
     {
-        if (memcmp(listElem->data, word, 32) == 0)
+        if (strcmp(listElem->data, word) == 0)
         {
-            return; 
+            return;
         }
     }
     listPushFront(elem, word);

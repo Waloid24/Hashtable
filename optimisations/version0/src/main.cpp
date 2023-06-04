@@ -23,7 +23,6 @@ int main (int argc, char * argv[])
                 htFind (ht, testWord);
             }
         }
-
         htDestructor (&ht);
     }
 

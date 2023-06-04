@@ -26,11 +26,11 @@ CUSTOM_FLAGS    ?= -mavx -mavx2 -Wall -Wextra -Weffc++ -Waggressive-loop-optimiz
 				-fsanitize=unreachable -fsanitize=vla-bound -fsanitize=vptr
 
 SRC	:= hashtable.cpp hashfuncs.cpp
-SRC_ASM := bkdr.asm
+SRC_ASM := bkdr.asm crc32.asm
 OBJ	:= $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
-hashBkdr:= $(addprefix $(OBJDIR)/, $(SRC_ASM:.asm=.o))
+OBJ_ASM := $(addprefix $(OBJDIR)/, $(SRC_ASM:.asm=.o))
 
-all: $(OBJ) $(hashBkdr)
+all: $(OBJ) $(OBJ_ASM)
 
 $(OBJDIR)/%.o: %.cpp | $(OBJDIR)
 	@ $(CXX) -c $^ -o $@ $(CXXFLAGS) $(CUSTOM_FLAGS)

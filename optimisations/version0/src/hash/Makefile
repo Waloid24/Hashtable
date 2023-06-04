@@ -1,6 +1,6 @@
-CXX             ?= g++
+CXX         ?= g++
 CXXASM		?= nasm
-CXXFLAGS        ?= -g --static-pie -std=c++14 -fmax-errors=100 -fno-omit-frame-pointer -fPIE -lm -pie
+CXXFLAGS    ?= -g --static-pie -std=c++14 -fmax-errors=100 -fno-omit-frame-pointer -fPIE -lm -pie
 
 CUSTOM_FLAGS    ?= 	-Wall -Wextra -Weffc++ -Waggressive-loop-optimizations -Wc++0x-compat \
 			-Wc++11-compat -Wc++14-compat -Wcast-align -Wcast-qual -Wchar-subscripts \

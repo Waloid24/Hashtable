@@ -44,18 +44,11 @@ struct listElement_t * htFind (htMainElem hashtable, char * word)
     size_t lengthList = hashtable.htElem[index].size;
     listElement_t * listElem = hashtable.htElem[index].ptrToList->next; 
 
-    size_t lengthWord = strlen (word);
     char * data = nullptr;
 
     for (size_t i = 0; i < lengthList; i++)
     {
         data = listElem->data;
-
-        if (strlen(data) != lengthWord)
-        {
-            listElem = listElem->next;
-            continue;
-        }
 
         if (strcmp (data, word) == 0)
         {

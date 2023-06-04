@@ -6,6 +6,6 @@
 #include <stdlib.h>
 #include "../../logs/logs.hpp"
 
-size_t            hashBkdr        (char * word);
+size_t hashBkdr (char * word);
 
 #endif 

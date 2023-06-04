@@ -1,8 +1,8 @@
 export CXX	:= g++
 
-CXXFLAGS 	:= -g --static-pie -std=c++14 -fmax-errors=100 -fno-omit-frame-pointer -fPIE -lm -no-pie -fPIC
+CXXFLAGS 	:= -g --static-pie -std=c++14 -fno-omit-frame-pointer -fPIE -no-pie -mavx -mavx2
 
-export CUSTOM_FLAGS := -mavx -mavx2 -O2
+export CUSTOM_FLAGS := -O2
 
 # 				-mavx -mavx2 -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations -Wc++0x-compat \
 # 				-Wc++11-compat -Wc++14-compat -Wcast-align -Wcast-qual -Wchar-subscripts \
@@ -29,8 +29,8 @@ export CUSTOM_FLAGS := -mavx -mavx2 -O2
 
 export DESTDIR	:= $(CURDIR)/bin
 export OBJDIR	:= $(CURDIR)/obj
-TABLES			:= $(CURDIR)/tables
-OUT	  			:= $(DESTDIR)/main
+TABLES		:= $(CURDIR)/tables
+OUT	  	:= $(DESTDIR)/main
 
 isLog 		 = yesLogs
 

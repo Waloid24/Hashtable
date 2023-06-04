@@ -15,7 +15,6 @@ FILE * _$logOF (const char * nameFile)
         logfile = fopen (nameFile, "a+");
     }
     MY_ASSERT (logfile == nullptr, "Unable to open the file");
-    setbuf(logfile, nullptr);
 
     return logfile;
 }

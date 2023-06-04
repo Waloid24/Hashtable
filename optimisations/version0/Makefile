@@ -1,6 +1,6 @@
 export CXX	:= g++
 
-CXXFLAGS 	:= -g --static-pie -std=c++14 -fmax-errors=100 -fno-omit-frame-pointer -fPIE -lm -no-pie -fPIC
+CXXFLAGS 	:= -g --static-pie -std=c++14 -fmax-errors=100 -fno-omit-frame-pointer -fPIE -no-pie
 
 export CUSTOM_FLAGS := -O2
 

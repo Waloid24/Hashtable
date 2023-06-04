@@ -1,8 +1,8 @@
-global hashBkdr
+global hashBkdrAsm
 
 section .text
 
-hashBkdr:                   ; avoiding registers that we have to keep
+hashBkdrAsm:                   ; avoiding registers that we have to keep
    xor rax, rax             ; hash
    xor rcx, rcx
 
